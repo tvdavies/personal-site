@@ -1,0 +1,15 @@
+{
+  "name": "personal-site",
+  "module": "server.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --hot ./server.ts",
+    "start": "bun ./server.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {}
+}
