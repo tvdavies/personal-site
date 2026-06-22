@@ -10,8 +10,8 @@ import type { Script } from "./terminal/Stream";
 import { sleep, streamText } from "./terminal/Stream";
 import { help } from "./scripts/intro";
 import { about } from "./scripts/about";
-import { cv } from "./scripts/cv";
 import { projects } from "./scripts/projects";
+import { blog } from "./scripts/blog";
 import { contact, hire } from "./scripts/contact";
 import { surprise } from "./scripts/surprise";
 
@@ -55,18 +55,18 @@ export const COMMANDS: Command[] = [
     run: () => about,
   },
   {
-    name: "cv",
-    aliases: ["resume"],
-    description: "experience, skills, education",
-    category: "info",
-    run: () => cv,
-  },
-  {
     name: "projects",
     aliases: ["ls", "portfolio"],
     description: "selected projects",
     category: "info",
     run: () => projects,
+  },
+  {
+    name: "blog",
+    aliases: ["posts", "writing"],
+    description: "read the blog",
+    category: "info",
+    run: (args) => blog(args),
   },
   {
     name: "contact",
@@ -158,7 +158,9 @@ export const COMMANDS: Command[] = [
         await sleep(400);
         if (/hire[-\s]?me/i.test(target)) {
           yield* streamText(
-            `Permission granted. Bouncing you to [LinkedIn](https://www.linkedin.com/in/) — drop me a line.\n`,
+            `Permission granted. The real answer is \`/hire\` — but the short ` +
+              `version: happily at Lleverage, open to interesting side projects. ` +
+              `Mail [tvdavies@gmail.com](mailto:tvdavies@gmail.com).\n`,
           );
           return;
         }
@@ -184,17 +186,17 @@ export const COMMANDS: Command[] = [
   },
   {
     name: "vim",
-    description: "open a file in vim (try /vim cv)",
+    description: "open a file in vim (try /vim about)",
     category: "fun",
     run: (args, ctx) =>
       async function* () {
-        const target = (args.trim() || "cv")
+        const target = (args.trim() || "about")
           .toLowerCase()
           .replace(/\.[^.]+$/, "");
         const file = VIM_FILES[target];
         if (!file) {
           yield* streamText(
-            `\`vim: ${args.trim() || "cv"}: No such file. Try one of:\` ` +
+            `\`vim: ${args.trim() || "about"}: No such file. Try one of:\` ` +
               Object.keys(VIM_FILES)
                 .map((f) => `\`${f}\``)
                 .join(", ") +
@@ -301,32 +303,6 @@ function subseq(hay: string, needle: string): boolean {
 // Plain-text "files" the /vim command can open. Edit freely.
 export const VIM_FILES: Record<string, { filename: string; content: string }> =
   {
-    cv: {
-      filename: "~/cv/cv.md",
-      content: `# Tom Davies — CV
-
-## Experience
-
-[Current Company]                       Senior AI Engineer · 2023 — present
-  Building [thing] with [stack]. Led [project], shipped [outcome].
-
-[Previous Company]                      Software Engineer · 2020 — 2023
-  Worked on [thing]. Notable: [outcome].
-
-## Skills
-
-  Languages       TypeScript, Python, Go
-  AI / ML         LLM orchestration, agents, RAG, evals, fine-tuning
-  Infra           Bun, Node, Postgres, Redis, Docker, AWS
-  Frontend        React, vanilla DOM, Three.js, WebGL
-
-## Education
-
-[University]                            [Degree] · [Year]
-
-— end of file —
-`,
-    },
     about: {
       filename: "~/about/bio.md",
       content: `# Tom Davies
@@ -347,12 +323,13 @@ works well.
       content: `# this site
 
 A personal site that pretends to be a CLI agent.
-Vanilla TypeScript + Bun. WebGL shader behind the chrome.
+Static Astro + vanilla TypeScript. WebGL shader behind the chrome.
 
   /help     list commands
+  /blog     read the blog
   /matrix   follow the white rabbit
   /theme    cycle palettes
-  /vim      open a file (cv | about | readme)
+  /vim      open a file (about | readme)
 
 — end of file —
 `,

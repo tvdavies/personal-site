@@ -61,7 +61,6 @@ export function runMatrixRain(durationMs = 6000) {
   });
 
   const start = performance.now();
-  let raf = 0;
 
   const tick = () => {
     const elapsed = performance.now() - start;
@@ -101,7 +100,7 @@ export function runMatrixRain(durationMs = 6000) {
       }
     }
 
-    raf = requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   };
-  raf = requestAnimationFrame(tick);
+  requestAnimationFrame(tick);
 }

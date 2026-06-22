@@ -5,6 +5,17 @@ node_modules/
 dist/
 build/
 
+# astro generated types
+.astro/
+
+# vercel
+.vercel/
+
+# playwright mcp scratch (screenshots, snapshots)
+.playwright-mcp/
+*.png
+!public/*.png
+
 # logs
 *.log
 

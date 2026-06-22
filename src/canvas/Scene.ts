@@ -114,6 +114,10 @@ export function initScene(canvas: HTMLCanvasElement): SceneHandle {
   window.addEventListener("click", onClick, { passive: true });
 
   // ── render loop ─────────────────────────────────────────────────
+  // Honor prefers-reduced-motion: draw a single static frame, no animation.
+  const reduceMotion =
+    !!window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const start = performance.now();
   let raf = 0;
   let last = start;
@@ -139,12 +143,13 @@ export function initScene(canvas: HTMLCanvasElement): SceneHandle {
 
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
-    raf = requestAnimationFrame(tick);
+    if (!reduceMotion) raf = requestAnimationFrame(tick);
   };
   raf = requestAnimationFrame(tick);
 
-  // pause when tab is hidden
+  // pause when tab is hidden (no-op under reduced motion — already static)
   const onVis = () => {
+    if (reduceMotion) return;
     if (document.hidden) {
       cancelAnimationFrame(raf);
     } else {

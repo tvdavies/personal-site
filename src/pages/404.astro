@@ -1,0 +1,24 @@
+---
+import Terminal from "../layouts/Terminal.astro";
+---
+
+<Terminal page="404" cwd="~" title="404 — not found" noindex>
+  <div class="tool" aria-hidden="true">
+    <div class="tool-header">
+      <span class="tool-icon">▸</span>
+      <span class="tool-name">Resolve</span><span class="tool-paren">(</span><span
+        class="tool-arg">route</span
+      ><span class="tool-paren">)</span>
+      <span class="tool-status">✗ not found</span>
+    </div>
+  </div>
+
+  <div class="md">
+    <h1>404 — command not found</h1>
+    <p>That path doesn't resolve to anything.</p>
+    <p>
+      Try the <a href="/">home terminal</a> or the <a href="/blog">blog</a> —
+      or just start typing below.
+    </p>
+  </div>
+</Terminal>

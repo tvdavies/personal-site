@@ -1,0 +1,33 @@
+---
+import Terminal from "../layouts/Terminal.astro";
+---
+
+<Terminal
+  page="home"
+  cwd="~"
+  title="Tom Davies — AI engineer"
+  description="Tom Davies — AI engineer. A personal site that thinks it's a CLI."
+>
+  {/* The terminal fills this in via JS. This fallback covers no-JS + crawlers. */}
+  <noscript>
+    <div class="md">
+      <h1>Tom Davies</h1>
+      <p>
+        AI engineer. I build things with language models — agents, tools, eval
+        harnesses, the kind of plumbing that turns "cool demo" into "ships and
+        stays up."
+      </p>
+      <p>
+        This site is an interactive terminal and works best with JavaScript
+        enabled. In the meantime:
+      </p>
+      <ul>
+        <li><a href="/blog">Read the blog</a></li>
+        <li>
+          <a href="https://github.com/tvdavies" rel="me noopener">GitHub</a>
+        </li>
+        <li><a href="mailto:tvdavies@gmail.com">tvdavies@gmail.com</a></li>
+      </ul>
+    </div>
+  </noscript>
+</Terminal>

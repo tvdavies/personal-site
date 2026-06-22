@@ -1,0 +1,190 @@
+---
+import "../styles.css";
+import { getCollection } from "astro:content";
+import { THEMES } from "../theme";
+
+interface Props {
+  /** <title> + og:title */
+  title?: string;
+  description?: string;
+  /** Shown in the prompt path and status bar, e.g. "~", "~/blog". */
+  cwd?: string;
+  /** Drives which nav item is highlighted. */
+  active?: "about" | "projects" | "blog" | "contact" | null;
+  /** "home" boots the full REPL; anything else boots the lite chrome. */
+  page?: string;
+  /** Emit robots=noindex and drop the canonical (used by 404). */
+  noindex?: boolean;
+}
+
+const {
+  title = "tom@portfolio",
+  description = "Tom Davies — AI engineer. A personal site that thinks it's a CLI.",
+  cwd = "~",
+  active = null,
+  page = "page",
+  noindex = false,
+} = Astro.props;
+
+// Slim manifest so the live terminal's `/blog` command can list posts inline.
+const posts = (await getCollection("blog"))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((p) => ({
+    slug: p.id,
+    title: p.data.title,
+    date: p.data.date.toISOString(),
+    description: p.data.description,
+  }));
+
+const navItems = [
+  { id: "about", label: "about", href: "/#about" },
+  { id: "projects", label: "projects", href: "/#projects" },
+  { id: "blog", label: "blog", href: "/blog" },
+  { id: "contact", label: "contact", href: "/#contact" },
+] as const;
+
+// Normalise to no trailing slash (matches our internal links + vercel.json).
+const path = Astro.url.pathname.replace(/(.)\/$/, "$1");
+const canonical = Astro.site ? new URL(path, Astro.site).href : path;
+const ogImage = Astro.site ? new URL("/og.png", Astro.site).href : "/og.png";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Tom Davies — blog"
+      href="/rss.xml"
+    />
+    {
+      noindex ? (
+        <meta name="robots" content="noindex, follow" />
+      ) : (
+        <link rel="canonical" href={canonical} />
+      )
+    }
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="tom@portfolio" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#1a1714" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    />
+    {/* Apply the saved theme before paint to avoid a flash of the default. */}
+    <script is:inline define:vars={{ themes: THEMES }}>
+      try {
+        const saved = localStorage.getItem("tom.portfolio.theme");
+        const t = themes.find((x) => x.id === saved);
+        if (t) {
+          for (const k in t.vars) {
+            document.documentElement.style.setProperty(k, t.vars[k]);
+          }
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body data-page={page}>
+    <div id="app">
+      <canvas id="bg-canvas" aria-hidden="true"></canvas>
+      <main id="terminal" class="terminal" aria-label="Terminal portfolio">
+        <header class="titlebar" aria-hidden="true">
+          <div class="titlebar-dots">
+            <span class="dot dot-r"></span>
+            <span class="dot dot-y"></span>
+            <span class="dot dot-g"></span>
+          </div>
+          <div class="titlebar-title">tom@portfolio — {cwd} — -zsh</div>
+          <div class="titlebar-spacer"></div>
+        </header>
+
+        <nav class="nav" aria-label="Primary">
+          {
+            navItems.map((item) => (
+              <a
+                class:list={["nav-link", { active: active === item.id }]}
+                href={item.href}
+                aria-current={active === item.id ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <section id="log" class="log">
+          <slot />
+        </section>
+
+        <form id="prompt-form" class="prompt" autocomplete="off">
+          <span class="prompt-sigil">❯</span>
+          <span class="prompt-path">{cwd}</span>
+          <input
+            id="prompt-input"
+            class="prompt-input"
+            type="text"
+            spellcheck="false"
+            autocapitalize="off"
+            autocorrect="off"
+            aria-label="Ask anything about Tom"
+          />
+          <span class="prompt-cursor" aria-hidden="true">▍</span>
+        </form>
+
+        <footer id="statusbar" class="statusbar" aria-hidden="true">
+          <span class="status-left">
+            <span class="status-pill">tom-4-opus</span>
+            <span class="status-sep">·</span>
+            <span class="status-cwd">{cwd}</span>
+            <span class="status-sep">·</span>
+            <span class="status-branch">main ●</span>
+          </span>
+          <span class="status-right">
+            <kbd>⏎</kbd> send
+            <span class="status-sep">·</span>
+            <kbd>/</kbd> commands
+            <span class="status-sep">·</span>
+            <kbd>?</kbd> help
+          </span>
+        </footer>
+      </main>
+    </div>
+
+    <div
+      id="sr-status"
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+    </div>
+
+    <script is:inline define:vars={{ posts }}>
+      window.__POSTS = posts;
+    </script>
+    <script>
+      import { boot } from "../boot/main";
+      boot();
+    </script>
+  </body>
+</html>

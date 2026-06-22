@@ -18,16 +18,26 @@ export const about: Script = async function* () {
 
   yield* streamText(
     `# Tom Davies\n\n` +
-      `AI engineer. I build things with language models — agents, tools, eval harnesses, the kind of plumbing ` +
+      `AI engineer at [Lleverage](https://lleverage.ai). I build things with ` +
+      `language models — agents, tools, eval harnesses, the kind of plumbing ` +
       `that turns "cool demo" into "ships and stays up."\n\n` +
-      `I care about: **legible systems**, **tight feedback loops**, and the difference between ` +
-      `something that *demos* well and something that *works* well.\n\n` +
-      `Off the clock I write the occasional blog post, tinker with generative graphics, ` +
-      `and over-engineer my personal site.\n\n` +
+      `I care about: **legible systems**, **tight feedback loops**, and the ` +
+      `difference between something that *demos* well and something that ` +
+      `*works* well.\n\n` +
+      `Off the clock I write the occasional [blog post](/blog), tinker with ` +
+      `generative graphics, and over-engineer my personal site (you're in it).\n\n` +
       `## Links\n\n` +
-      `- [LinkedIn](https://www.linkedin.com/in/) — work history\n` +
-      `- [GitHub](https://github.com/) — code\n` +
-      `- email — _coming soon_\n\n` +
-      `_Replace the placeholders above with your real URLs in \`src/scripts/about.ts\`._`,
+      `- [GitHub](https://github.com/tvdavies) — code, including this site\n` +
+      `- [Blog](/blog) — occasional writing\n` +
+      `- [tvdavies@gmail.com](mailto:tvdavies@gmail.com) — email\n`,
   );
+
+  yield {
+    type: "chips",
+    items: [
+      { label: "what have you built?", prompt: "/projects" },
+      { label: "read the blog", prompt: "/blog" },
+      { label: "how do I reach you?", prompt: "/contact" },
+    ],
+  };
 };

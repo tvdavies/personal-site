@@ -11,27 +11,30 @@ export const projects: Script = async function* () {
   yield {
     type: "tool_progress",
     id: "ls-p",
-    line:
-      "drwxr-xr-x  this-site/\n" +
-      "drwxr-xr-x  project-alpha/\n" +
-      "drwxr-xr-x  project-beta/\n" +
-      "drwxr-xr-x  project-gamma/\n",
+    line: "drwxr-xr-x  this-site/\n",
   };
-  yield { type: "tool_end", id: "ls-p", summary: "4 dirs" };
+  yield { type: "tool_end", id: "ls-p", summary: "1 dir" };
   await sleep(140);
 
   yield* streamText(
     `## Selected projects\n\n` +
       `### this-site\n` +
-      `The thing you're looking at. A personal site that pretends to be a CLI agent. ` +
-      `Vanilla TypeScript + Bun, with a WebGL canvas underneath for shader effects.\n\n` +
-      `### project-alpha\n` +
-      `_Short description._ What it does, what's interesting about it, what you learned.\n\n` +
-      `### project-beta\n` +
-      `_Short description._ Replace me.\n\n` +
-      `### project-gamma\n` +
-      `_Short description._ Replace me.\n\n` +
+      `The thing you're looking at. A personal site that pretends to be a CLI ` +
+      `agent — static [Astro](https://astro.build) under the hood, a hand-rolled ` +
+      `terminal UI in vanilla TypeScript, and a WebGL shader for the background. ` +
+      `Zero client dependencies. Source on ` +
+      `[GitHub](https://github.com/tvdavies).\n\n` +
       `---\n\n` +
-      `_Edit \`src/scripts/projects.ts\` to fill these in._\n`,
+      `_More to come. I mostly build at work these days; the side projects ` +
+      `worth sharing will land [on the blog](/blog)._\n`,
   );
+
+  yield {
+    type: "chips",
+    items: [
+      { label: "how it's built", prompt: "/blog how-this-site-works" },
+      { label: "read the blog", prompt: "/blog" },
+      { label: "how do I reach you?", prompt: "/contact" },
+    ],
+  };
 };

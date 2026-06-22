@@ -16,6 +16,8 @@ const escapeHtml = (s: string) =>
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
+const escapeAttr = (s: string) => escapeHtml(s).replace(/"/g, "&quot;");
+
 const inline = (s: string) => {
   let out = escapeHtml(s);
   // inline code first to protect content
@@ -24,12 +26,17 @@ const inline = (s: string) => {
     codes.push(c);
     return `\u0000${codes.length - 1}\u0000`;
   });
-  // links [text](url)
-  out = out.replace(
-    /\[([^\]]+)\]\(([^)\s]+)\)/g,
-    (_, t, u) =>
-      `<a href="${u}" target="_blank" rel="noopener noreferrer">${t}</a>`,
-  );
+  // links [text](url). Allow only safe schemes — refuse javascript:/data:/etc
+  // (markdown can be reached from untrusted input via ?q=), and escape the URL
+  // into the attribute. External (http) links open in a new tab; internal
+  // links (/blog/…, #…, mailto:) navigate in place.
+  out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, t, u) => {
+    const safe = /^(https?:|mailto:)/i.test(u) || /^[/#]/.test(u);
+    if (!safe) return m; // leave the literal text; never emit an unsafe href
+    const external = /^https?:\/\//i.test(u);
+    const attrs = external ? ` target="_blank" rel="noopener noreferrer"` : "";
+    return `<a href="${escapeAttr(u)}"${attrs}>${t}</a>`;
+  });
   // bold
   out = out.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
   // italic (underscore or single star, avoid touching ** which is gone)

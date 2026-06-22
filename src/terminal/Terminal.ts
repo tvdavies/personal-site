@@ -41,6 +41,7 @@ export class Terminal {
 
     this.form.addEventListener("submit", this.onSubmit);
     this.log.addEventListener("click", this.onLogClick);
+    this.log.addEventListener("keydown", this.onLogKey);
     document.addEventListener("keydown", this.onKey);
     this.input.addEventListener("keydown", this.onInputKey);
 
@@ -158,9 +159,39 @@ export class Terminal {
     }
     const toolHeader = target.closest<HTMLElement>(".tool-header");
     if (toolHeader) {
-      toolHeader.parentElement?.classList.toggle("collapsed");
+      this.toggleTool(toolHeader);
     }
   };
+
+  // Keyboard support for the collapsible tool panels (they're role="button").
+  private onLogKey = (e: KeyboardEvent) => {
+    const header = (e.target as HTMLElement).closest<HTMLElement>(
+      ".tool-header",
+    );
+    if (header && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      this.toggleTool(header);
+    }
+  };
+
+  private toggleTool(header: HTMLElement) {
+    const tool = header.parentElement;
+    if (!tool) return;
+    const collapsed = tool.classList.toggle("collapsed");
+    header.setAttribute("aria-expanded", String(!collapsed));
+  }
+
+  // Announce a completed response once (avoids per-token screen-reader spam).
+  private announce(msg: HTMLElement) {
+    const region = document.getElementById("sr-status");
+    if (!region) return;
+    const text = Array.from(msg.querySelectorAll(".md"))
+      .map((e) => e.textContent ?? "")
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (text) region.textContent = text;
+  }
 
   private onKey = (e: KeyboardEvent) => {
     // focus input on any printable key when not focused
@@ -184,7 +215,7 @@ export class Terminal {
   private appendUserLine(text: string) {
     const el = document.createElement("div");
     el.className = "msg msg-user";
-    el.innerHTML = `<span class="sigil">❯</span><span class="text"></span>`;
+    el.innerHTML = `<span class="sigil" aria-hidden="true">❯</span><span class="text"></span>`;
     el.querySelector(".text")!.textContent = text;
     this.log.appendChild(el);
     this.scrollToBottom();
@@ -243,6 +274,7 @@ export class Terminal {
     }
 
     closeCurrentSegment();
+    this.announce(msg);
     this.setBusy(false);
     this.input.focus();
     this.scrollToBottom();
@@ -269,7 +301,7 @@ export class Terminal {
         const t = document.createElement("div");
         t.className = "msg-thinking";
         t.dataset.role = "thinking";
-        t.innerHTML = `<span class="spinner"></span> <span class="thinking-label" style="color:var(--fg-dim)">Thinking…</span>`;
+        t.innerHTML = `<span class="spinner" aria-hidden="true"></span> <span class="thinking-label" style="color:var(--fg-dim)">Thinking…</span>`;
         msg.appendChild(t);
         this.startSpinner("thinking", t.querySelector(".spinner")!);
         break;
@@ -286,16 +318,16 @@ export class Terminal {
         tool.className = "tool";
         tool.dataset.toolId = ev.id;
         tool.innerHTML = `
-          <div class="tool-header">
-            <span class="tool-icon">▸</span>
+          <div class="tool-header" role="button" tabindex="0" aria-expanded="true">
+            <span class="tool-icon" aria-hidden="true">▸</span>
             <span class="tool-name">${escapeHtml(ev.name)}</span>${
               ev.arg
-                ? `<span class="tool-paren">(</span><span class="tool-arg">${escapeHtml(
+                ? `<span class="tool-paren" aria-hidden="true">(</span><span class="tool-arg">${escapeHtml(
                     ev.arg,
-                  )}</span><span class="tool-paren">)</span>`
+                  )}</span><span class="tool-paren" aria-hidden="true">)</span>`
                 : ""
             }
-            <span class="tool-status"><span class="spinner"></span> running</span>
+            <span class="tool-status"><span class="spinner" aria-hidden="true"></span> running</span>
           </div>
           <div class="tool-body"></div>
         `;

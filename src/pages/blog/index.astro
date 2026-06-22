@@ -1,0 +1,48 @@
+---
+import Terminal from "../../layouts/Terminal.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog"))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+const count = posts.length;
+---
+
+<Terminal
+  page="blog"
+  active="blog"
+  cwd="~/blog"
+  title="Blog — Tom Davies"
+  description="Writing by Tom Davies on AI engineering, agents, evals, and over-built personal sites."
+>
+  <div class="tool" aria-hidden="true">
+    <div class="tool-header">
+      <span class="tool-icon">▸</span>
+      <span class="tool-name">Bash</span><span class="tool-paren">(</span><span
+        class="tool-arg">ls ~/blog</span
+      ><span class="tool-paren">)</span>
+      <span class="tool-status done">✓ {count} {count === 1 ? "post" : "posts"}</span>
+    </div>
+  </div>
+
+  <div class="md">
+    <h1>~/blog</h1>
+    {count === 0 && <p><em>No posts yet — check back soon.</em></p>}
+  </div>
+
+  <ul class="post-list">
+    {
+      posts.map((post) => (
+        <li class="post-item">
+          <a class="post-link" href={`/blog/${post.id}`}>
+            <span class="post-date">{fmt(post.data.date)}</span>
+            <span class="post-title">{post.data.title}</span>
+          </a>
+          <p class="post-desc">{post.data.description}</p>
+        </li>
+      ))
+    }
+  </ul>
+</Terminal>

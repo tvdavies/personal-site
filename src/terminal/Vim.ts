@@ -23,6 +23,9 @@ export function openVim(opts: VimOptions) {
   const overlay = document.createElement("div");
   overlay.className = "vim-overlay";
   overlay.tabIndex = 0;
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", `${opts.filename} — read-only, press :q to close`);
   overlay.innerHTML = `
     <div class="vim-buffer" role="document"></div>
     <div class="vim-status">

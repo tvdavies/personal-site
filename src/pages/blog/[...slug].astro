@@ -1,0 +1,80 @@
+---
+import Terminal from "../../layouts/Terminal.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("blog"))
+    .filter((p) => !p.data.draft)
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      // The list is newest-first, so the previous index is the *newer* post.
+      newer: i > 0 ? posts[i - 1] : null,
+      older: i < posts.length - 1 ? posts[i + 1] : null,
+    },
+  }));
+}
+
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<Terminal
+  page="post"
+  active="blog"
+  cwd={`~/blog/${post.id}`}
+  title={`${post.data.title} — Tom Davies`}
+  description={post.data.description}
+>
+  <article class="post">
+    <div class="tool" aria-hidden="true">
+      <div class="tool-header">
+        <span class="tool-icon">▸</span>
+        <span class="tool-name">Read</span><span class="tool-paren">(</span><span
+          class="tool-arg">~/blog/{post.id}.md</span
+        ><span class="tool-paren">)</span>
+        <span class="tool-status done">✓ read</span>
+      </div>
+    </div>
+
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      <p class="post-meta">
+        <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+        {post.data.updated && <> · updated {fmt(post.data.updated)}</>}
+        {
+          post.data.tags.length > 0 && (
+            <> · {post.data.tags.map((t) => `#${t}`).join(" ")}</>
+          )
+        }
+      </p>
+    </header>
+
+    <div class="md post-body">
+      <Content />
+    </div>
+
+    <nav class="post-nav" aria-label="More posts">
+      {
+        older && (
+          <a class="post-nav-link prev" href={`/blog/${older.id}`}>
+            ← {older.data.title}
+          </a>
+        )
+      }
+      {
+        newer && (
+          <a class="post-nav-link next" href={`/blog/${newer.id}`}>
+            {newer.data.title} →
+          </a>
+        )
+      }
+      <a class="post-nav-link back" href="/blog">all posts</a>
+    </nav>
+  </article>
+</Terminal>

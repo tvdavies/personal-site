@@ -24,6 +24,12 @@ export async function* streamText(
   text: string,
   opts: { tokensPerSecond?: number; jitter?: number } = {},
 ): AsyncGenerator<StreamEvent, void, void> {
+  // Respect prefers-reduced-motion: emit the whole text at once, no animation.
+  if (prefersReducedMotion()) {
+    yield { type: "text", value: text };
+    return;
+  }
+
   const tps = opts.tokensPerSecond ?? 120;
   const jitter = opts.jitter ?? 0.6;
   const baseMs = 1000 / tps;
@@ -44,4 +50,12 @@ export async function* streamText(
 
 export function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, Math.max(0, ms)));
+}
+
+export function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    !!window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 }

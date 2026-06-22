@@ -12,18 +12,20 @@ export const contact: Script = async function* () {
   yield {
     type: "tool_progress",
     id: "resolve",
-    line: "→ linkedin: ok\n→ github:   ok\n→ email:    ok\n",
+    line: "→ email:  ok\n→ github: ok\n",
   };
-  yield { type: "tool_end", id: "resolve", summary: "3 channels" };
+  yield { type: "tool_end", id: "resolve", summary: "2 channels" };
   await sleep(140);
 
   yield* streamText(
     `## Contact\n\n` +
-      `- [LinkedIn](https://www.linkedin.com/in/) — best for work-related things\n` +
-      `- [GitHub](https://github.com/) — code\n` +
-      `- email — _replace in \`src/scripts/contact.ts\`_\n\n` +
-      `Open to interesting AI engineering work, especially around agents, evals, and ` +
-      `tooling. Reach out — I read everything.\n`,
+      `- [tvdavies@gmail.com](mailto:tvdavies@gmail.com) — email, best for ` +
+      `anything substantial\n` +
+      `- [GitHub](https://github.com/tvdavies) — code\n` +
+      `- [Blog](/blog) — what I'm thinking about\n\n` +
+      `I'm not job-hunting — happily at [Lleverage](https://lleverage.ai) — but ` +
+      `I read everything, and a genuinely interesting side project will always ` +
+      `get my attention. Try \`/hire\` for the longer version.\n`,
   );
 };
 
@@ -34,10 +36,14 @@ export const hire: Script = async function* () {
 
   yield* streamText(
     `_Reading the room…_\n\n` +
-      `**Yes — selectively.** I'm interested in roles or contracts where the work involves real ` +
-      `language-model engineering, not just "wrap GPT in a UI." Bonus points for problems where ` +
-      `evals, agent design, or developer tooling are first-class concerns.\n\n` +
-      `The fastest path is [LinkedIn](https://www.linkedin.com/in/) — message with a sentence ` +
-      `or two about the problem you're solving and I'll get back to you.\n`,
+      `**Happily employed.** I'm an AI engineer at ` +
+      `[Lleverage](https://lleverage.ai), so I'm not looking for a new role or ` +
+      `contract work right now.\n\n` +
+      `That said — I'm always up for a good *side* project. If you've got ` +
+      `something genuinely novel (agents, evals, developer tooling, the strange ` +
+      `edges of LLM engineering) and you want a collaborator or just a sounding ` +
+      `board, I'd love to hear about it. I can't promise bandwidth, but the ` +
+      `right problem is hard to resist.\n\n` +
+      `Email me: [tvdavies@gmail.com](mailto:tvdavies@gmail.com).\n`,
   );
 };

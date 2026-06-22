@@ -1,4 +1,4 @@
-import type { Script, StreamEvent } from "../terminal/Stream";
+import type { Script } from "../terminal/Stream";
 import { sleep, streamText } from "../terminal/Stream";
 
 export const intro: Script = async function* () {
@@ -24,17 +24,20 @@ export const intro: Script = async function* () {
 
   yield* streamText(
     `# Hi, I'm Tom Davies\n\n` +
-      `I'm an **AI engineer** — I build things with language models, and occasionally write about them. ` +
-      `This site is, somewhat on the nose, a portfolio shaped like the tools I use every day.\n\n` +
-      `Type a question below, pick one of the chips, or try \`/help\` to see slash commands. ` +
-      `_(I'm not actually an LLM — every response is hand-written. The joke is that the assistant is me.)_\n\n`,
+      `I'm an **AI engineer** — I build things with language models, and ` +
+      `occasionally [write about them](/blog). This site is, somewhat on the ` +
+      `nose, a portfolio shaped like the tools I use every day.\n\n` +
+      `Type a question below, use the nav up top, pick a chip, or try \`/help\` ` +
+      `for slash commands. ` +
+      `_(I'm not actually an LLM — every response is hand-written. The joke is ` +
+      `that the assistant is me.)_\n\n`,
   );
 
   yield {
     type: "chips",
     items: [
-      { label: "/cv", prompt: "/cv" },
       { label: "/projects", prompt: "/projects" },
+      { label: "/blog", prompt: "/blog" },
       { label: "/contact", prompt: "/contact" },
       { label: "/glitch", prompt: "/glitch" },
       { label: "/help", prompt: "/help" },
@@ -55,8 +58,8 @@ export const unknown: (input: string) => Script = (input) =>
       type: "chips",
       items: [
         { label: "tell me about Tom", prompt: "tell me about Tom" },
-        { label: "show me your CV", prompt: "show me your CV" },
         { label: "what have you built?", prompt: "what have you built?" },
+        { label: "read the blog", prompt: "/blog" },
         { label: "how do I contact you?", prompt: "how do I contact you?" },
         { label: "/help", prompt: "/help" },
       ],
@@ -67,12 +70,16 @@ export const help: Script = async function* () {
   yield* streamText(
     `## Commands\n\n` +
       `- \`/help\` — this list\n` +
-      `- \`/clear\` — clear the screen\n` +
-      `- \`/model\` — switch personality (coming soon)\n\n` +
+      `- \`/whoami\` — who is Tom?\n` +
+      `- \`/projects\` — what I've built\n` +
+      `- \`/blog\` — read the blog (try \`/blog <slug>\`)\n` +
+      `- \`/contact\` — how to reach me\n` +
+      `- \`/theme\` — repaint everything\n` +
+      `- \`/clear\` — clear the screen\n\n` +
       `## Try asking\n\n` +
       `- "tell me about Tom"\n` +
-      `- "show me your CV"\n` +
       `- "what have you built?"\n` +
+      `- "show me the blog"\n` +
       `- "how do I contact you?"\n` +
       `- "are you available for hire?"\n` +
       `- "surprise me"\n`,

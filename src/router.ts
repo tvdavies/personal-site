@@ -1,8 +1,8 @@
 import type { Script } from "./terminal/Stream";
 import { unknown } from "./scripts/intro";
 import { about } from "./scripts/about";
-import { cv } from "./scripts/cv";
 import { projects } from "./scripts/projects";
+import { blog } from "./scripts/blog";
 import { contact, hire } from "./scripts/contact";
 import { surprise } from "./scripts/surprise";
 import { findCommand, type CommandContext } from "./commands";
@@ -17,17 +17,20 @@ const NATURAL_ROUTES: NaturalRoute[] = [
     match: /(who are you|about|tell me about|whoami|introduce)/i,
     script: about,
   },
-  { match: /\b(cv|resume|résumé|experience|work history)\b/i, script: cv },
   {
     match: /\b(projects?|portfolio|what (have|did) you (built|made))\b/i,
     script: projects,
+  },
+  {
+    match: /\b(blog|posts?|writing|articles?|read)\b/i,
+    script: blog(""),
   },
   {
     match: /\b(hire|hiring|available|consult|freelance|contract)\b/i,
     script: hire,
   },
   {
-    match: /\b(contact|reach|email|linkedin|github|find you)\b/i,
+    match: /\b(contact|reach|email|github|find you)\b/i,
     script: contact,
   },
   { match: /\b(surprise|random|something cool)\b/i, script: surprise },
