@@ -239,7 +239,7 @@ export const COMMANDS: Command[] = [
         if (!m) {
           yield* streamText(
             `## Models\n\n` +
-              `- **tom-4-opus** _(current)_: verbose, the long answer\n` +
+              `- **tom-5-saga** _(current)_: verbose, the long answer\n` +
               `- **tom-4-haiku**: terse, the short answer\n` +
               `- **tom-1-classic**: circa 2014, plays guitar\n\n` +
               `Usage: \`/model tom-4-haiku\`\n`,
