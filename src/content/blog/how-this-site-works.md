@@ -1,7 +1,7 @@
 ---
 title: How this site works
 description: "A colophon — the terminal UI, the WebGL background, and why the whole thing is a static site you read inside a fake console."
-date: 2026-06-23
+date: 2026-06-22
 tags: ["meta", "astro", "frontend"]
 ---
 
