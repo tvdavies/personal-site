@@ -1,6 +1,6 @@
 import { renderMarkdown } from "./Markdown";
 import type { Script, StreamEvent } from "./Stream";
-import { sleep } from "./Stream";
+import { prefersReducedMotion, sleep } from "./Stream";
 
 const BRAILLE_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 
@@ -387,11 +387,13 @@ export class Terminal {
   }
 
   private startSpinner(id: string, el: Element) {
-    let i = 0;
+    el.textContent = BRAILLE_FRAMES[0]!;
+    // Under prefers-reduced-motion, leave a static glyph (no spinning).
+    if (prefersReducedMotion()) return;
+    let i = 1;
     const tick = () => {
       el.textContent = BRAILLE_FRAMES[i++ % BRAILLE_FRAMES.length]!;
     };
-    tick();
     const t = window.setInterval(tick, 80);
     this.spinnerTimers.set(id, t);
   }

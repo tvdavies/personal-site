@@ -42,13 +42,33 @@ export function initHome() {
       openVim({ filename, content, onExit: () => input.focus() }),
   });
 
+  // Track busy so nav clicks can queue a section instead of being dropped.
+  let busy = false;
+  let pendingSection: string | null = null;
+
   const terminal = new Terminal({
     log,
     form,
     input,
     router,
-    onBusyChange: (busy) => scene.setBusy(busy),
+    onBusyChange: (b) => {
+      busy = b;
+      scene.setBusy(b);
+      if (!b && pendingSection) {
+        const cmd = pendingSection;
+        pendingSection = null;
+        void terminal.run(cmd, { showUserLine: true });
+      }
+    },
   });
+
+  // Run an in-page section robustly: works even when the URL hash didn't
+  // change (re-clicking the active nav item) and queues instead of being
+  // silently dropped if a response is still streaming.
+  const runSection = (cmd: string) => {
+    if (busy) pendingSection = cmd;
+    else void terminal.run(cmd, { showUserLine: true });
+  };
 
   const menu = new CommandMenu({
     input,
@@ -77,7 +97,7 @@ export function initHome() {
     const key = location.hash.replace(/^#/, "").toLowerCase().trim();
     setNavActive(key);
     const p = hashToPrompt(location.hash);
-    if (p) void terminal.run(p, { showUserLine: true });
+    if (p) runSection(p);
   };
 
   const params = new URLSearchParams(location.search);
@@ -97,7 +117,27 @@ export function initHome() {
     });
   }
 
-  // Nav-strip clicks on the home page only change the hash → run here.
+  // Intercept nav-strip clicks for in-page sections so they always run — even
+  // on re-click (no hashchange fires) or while a response is still streaming.
+  // The blog link is a real route, so it's left to navigate normally.
+  document.querySelectorAll<HTMLAnchorElement>(".nav-link").forEach((a) => {
+    const href = a.getAttribute("href") ?? "";
+    if (!href.startsWith("/#")) return;
+    const key = href.slice(2).toLowerCase();
+    const prompt = hashToPrompt("#" + key);
+    if (!prompt) return;
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (location.hash !== "#" + key) {
+        history.replaceState(null, "", "/#" + key);
+      }
+      setNavActive(key);
+      runSection(prompt);
+      input.focus();
+    });
+  });
+
+  // Back/forward or a manually edited hash still works.
   window.addEventListener("hashchange", runHash);
 
   input.focus();

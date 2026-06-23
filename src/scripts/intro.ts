@@ -1,5 +1,6 @@
 import type { Script } from "../terminal/Stream";
 import { sleep, streamText } from "../terminal/Stream";
+import { PORTRAIT } from "./portrait";
 
 export const intro: Script = async function* () {
   yield { type: "thinking_start" };
@@ -22,9 +23,15 @@ export const intro: Script = async function* () {
   yield { type: "tool_end", id: "read-about", summary: "read 412 bytes" };
   await sleep(160);
 
+  yield* streamText(`# Hi, I'm Tom Davies\n\n`);
+
+  yield {
+    type: "raw_html",
+    html: `<pre class="ascii-portrait" aria-hidden="true">${PORTRAIT}</pre>`,
+  };
+
   yield* streamText(
-    `# Hi, I'm Tom Davies\n\n` +
-      `I'm a software engineer. I build things, lately a lot of them with ` +
+    `I'm a software engineer. I build things, lately a lot of them with ` +
       `language models, and I [write about it](/blog) now and then. This site ` +
       `is a portfolio shaped like the tools I use all day, which felt more ` +
       `honest than a landing page.\n\n` +

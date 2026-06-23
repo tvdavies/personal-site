@@ -344,6 +344,18 @@ body {
   background: color-mix(in oklab, var(--accent) 8%, transparent);
 }
 
+/* ascii portrait on the landing page (decorative) */
+
+.ascii-portrait {
+  color: var(--accent-dim);
+  font-size: 0.6rem;
+  line-height: 1.05;
+  white-space: pre;
+  overflow-x: auto;
+  margin: 2px 0 16px;
+  user-select: none;
+}
+
 /* caret blink for streaming */
 
 .caret {
