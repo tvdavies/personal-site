@@ -10,7 +10,7 @@ interface Props {
   /** Shown in the prompt path and status bar, e.g. "~", "~/blog". */
   cwd?: string;
   /** Drives which nav item is highlighted. */
-  active?: "about" | "projects" | "blog" | "contact" | null;
+  active?: "about" | "blog" | "contact" | null;
   /** "home" boots the full REPL; anything else boots the lite chrome. */
   page?: string;
   /** Emit robots=noindex and drop the canonical (used by 404). */
@@ -19,7 +19,7 @@ interface Props {
 
 const {
   title = "tom@portfolio",
-  description = "Tom Davies — AI engineer. A personal site that thinks it's a CLI.",
+  description = "Tom Davies, software engineer. A personal site that thinks it's a CLI.",
   cwd = "~",
   active = null,
   page = "page",
@@ -39,7 +39,6 @@ const posts = (await getCollection("blog"))
 
 const navItems = [
   { id: "about", label: "about", href: "/#about" },
-  { id: "projects", label: "projects", href: "/#projects" },
   { id: "blog", label: "blog", href: "/blog" },
   { id: "contact", label: "contact", href: "/#contact" },
 ] as const;
@@ -61,7 +60,7 @@ const ogImage = Astro.site ? new URL("/og.png", Astro.site).href : "/og.png";
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="Tom Davies — blog"
+      title="Tom Davies's blog"
       href="/rss.xml"
     />
     {
@@ -114,7 +113,7 @@ const ogImage = Astro.site ? new URL("/og.png", Astro.site).href : "/og.png";
             <span class="dot dot-y"></span>
             <span class="dot dot-g"></span>
           </div>
-          <div class="titlebar-title">tom@portfolio — {cwd} — -zsh</div>
+          <div class="titlebar-title">tom@portfolio:{cwd}</div>
           <div class="titlebar-spacer"></div>
         </header>
 

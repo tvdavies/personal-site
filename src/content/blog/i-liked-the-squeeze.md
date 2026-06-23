@@ -1,6 +1,6 @@
 ---
 title: I liked the squeeze
-description: "AI coding can hand you the diff without the messy middle — but that intermediate state is where the design, and the fun, actually live."
+description: "AI coding can hand you the diff without the messy middle, but that intermediate state is where the design, and the fun, actually live."
 date: 2026-05-23
 tags: ["ai", "craft", "programming"]
 ---

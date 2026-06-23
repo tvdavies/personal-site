@@ -49,14 +49,14 @@ export const blog: (args: string) => Script = (args) =>
     await sleep(140);
 
     if (!posts.length) {
-      yield* streamText(`Nothing published yet — check back soon.\n`);
+      yield* streamText(`Nothing published yet, check back soon.\n`);
       return;
     }
 
     let md = `## ~/blog\n\n`;
     for (const p of posts) {
       md += `### [${p.title}](/blog/${p.slug})\n`;
-      md += `_${p.date.slice(0, 10)}_ — ${p.description}\n\n`;
+      md += `_${p.date.slice(0, 10)}_ · ${p.description}\n\n`;
     }
     yield* streamText(md);
 

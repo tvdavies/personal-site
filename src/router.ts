@@ -1,7 +1,6 @@
 import type { Script } from "./terminal/Stream";
 import { unknown } from "./scripts/intro";
 import { about } from "./scripts/about";
-import { projects } from "./scripts/projects";
 import { blog } from "./scripts/blog";
 import { contact, hire } from "./scripts/contact";
 import { surprise } from "./scripts/surprise";
@@ -16,10 +15,6 @@ const NATURAL_ROUTES: NaturalRoute[] = [
   {
     match: /(who are you|about|tell me about|whoami|introduce)/i,
     script: about,
-  },
-  {
-    match: /\b(projects?|portfolio|what (have|did) you (built|made))\b/i,
-    script: projects,
   },
   {
     match: /\b(blog|posts?|writing|articles?|read)\b/i,

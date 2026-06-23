@@ -19,13 +19,13 @@ export const contact: Script = async function* () {
 
   yield* streamText(
     `## Contact\n\n` +
-      `- [tvdavies@gmail.com](mailto:tvdavies@gmail.com) — email, best for ` +
-      `anything substantial\n` +
-      `- [GitHub](https://github.com/tvdavies) — code\n` +
-      `- [Blog](/blog) — what I'm thinking about\n\n` +
-      `I'm not job-hunting — happily at [Lleverage](https://lleverage.ai) — but ` +
-      `I read everything, and a genuinely interesting side project will always ` +
-      `get my attention. Try \`/hire\` for the longer version.\n`,
+      `- [tvdavies@gmail.com](mailto:tvdavies@gmail.com), best for anything ` +
+      `that needs a proper reply\n` +
+      `- [GitHub](https://github.com/tvdavies)\n` +
+      `- [Blog](/blog)\n\n` +
+      `I'm not job hunting. I'm happily at [Lleverage](https://lleverage.ai). ` +
+      `But I read everything, and a genuinely interesting side project will ` +
+      `always get my attention. Try \`/hire\` for the longer version.\n`,
   );
 };
 
@@ -35,15 +35,15 @@ export const hire: Script = async function* () {
   yield { type: "thinking_end" };
 
   yield* streamText(
-    `_Reading the room…_\n\n` +
-      `**Happily employed.** I'm an AI engineer at ` +
-      `[Lleverage](https://lleverage.ai), so I'm not looking for a new role or ` +
-      `contract work right now.\n\n` +
-      `That said — I'm always up for a good *side* project. If you've got ` +
-      `something genuinely novel (agents, evals, developer tooling, the strange ` +
-      `edges of LLM engineering) and you want a collaborator or just a sounding ` +
-      `board, I'd love to hear about it. I can't promise bandwidth, but the ` +
-      `right problem is hard to resist.\n\n` +
-      `Email me: [tvdavies@gmail.com](mailto:tvdavies@gmail.com).\n`,
+    `_Reading the room..._\n\n` +
+      `I'm happily employed. I build AI agents at ` +
+      `[Lleverage](https://lleverage.ai), so I'm not after a job or contract ` +
+      `work right now.\n\n` +
+      `That said, I'm always up for a good side project. If you've got ` +
+      `something genuinely interesting (agents, evals, developer tooling, the ` +
+      `odd corners of LLM engineering) and you want a hand, or just someone to ` +
+      `think it through with, I'd like to hear about it. I can't promise much ` +
+      `time, but a good problem is hard to leave alone.\n\n` +
+      `Email me at [tvdavies@gmail.com](mailto:tvdavies@gmail.com).\n`,
   );
 };

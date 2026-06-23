@@ -107,7 +107,6 @@ const HASH_COMMANDS = new Set([
   "about",
   "whoami",
   "bio",
-  "projects",
   "contact",
   "reach",
   "hire",
@@ -115,7 +114,7 @@ const HASH_COMMANDS = new Set([
   "surprise",
 ]);
 
-/** Map a URL hash like "#projects" to a slash command, or null. */
+/** Map a URL hash like "#about" to a slash command, or null. */
 function hashToPrompt(hash: string): string | null {
   const key = hash.replace(/^#/, "").toLowerCase().trim();
   if (!key) return null;
@@ -127,7 +126,6 @@ const NAV_FOR_HASH: Record<string, string> = {
   about: "about",
   whoami: "about",
   bio: "about",
-  projects: "projects",
   contact: "contact",
   reach: "contact",
 };

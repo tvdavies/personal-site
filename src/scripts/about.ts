@@ -18,26 +18,28 @@ export const about: Script = async function* () {
 
   yield* streamText(
     `# Tom Davies\n\n` +
-      `AI engineer at [Lleverage](https://lleverage.ai). I build things with ` +
-      `language models — agents, tools, eval harnesses, the kind of plumbing ` +
-      `that turns "cool demo" into "ships and stays up."\n\n` +
-      `I care about: **legible systems**, **tight feedback loops**, and the ` +
-      `difference between something that *demos* well and something that ` +
-      `*works* well.\n\n` +
-      `Off the clock I write the occasional [blog post](/blog), tinker with ` +
-      `generative graphics, and over-engineer my personal site (you're in it).\n\n` +
+      `I'm a software engineer based in Sheffield. I've been doing this ` +
+      `commercially for over a decade, a long stretch of it on critical ` +
+      `infrastructure at Ovarro, then Tes and Storyteq. These days I'm at ` +
+      `[Lleverage](https://lleverage.ai), building AI agents for a living.\n\n` +
+      `I care about legible systems and tight feedback loops. I like leaving a ` +
+      `file simpler than I found it, and I'm wary of tools that let me skip the ` +
+      `parts of the work that made me good at it.\n\n` +
+      `Off the clock I write the occasional [blog post](/blog), play a bit of ` +
+      `guitar, and over-engineer ` +
+      `[this site](https://github.com/tvdavies/personal-site).\n\n` +
       `## Links\n\n` +
-      `- [GitHub](https://github.com/tvdavies) — code, including this site\n` +
-      `- [Blog](/blog) — occasional writing\n` +
-      `- [tvdavies@gmail.com](mailto:tvdavies@gmail.com) — email\n`,
+      `- [GitHub](https://github.com/tvdavies) for code\n` +
+      `- [Blog](/blog) for the occasional post\n` +
+      `- [tvdavies@gmail.com](mailto:tvdavies@gmail.com)\n`,
   );
 
   yield {
     type: "chips",
     items: [
-      { label: "what have you built?", prompt: "/projects" },
       { label: "read the blog", prompt: "/blog" },
       { label: "how do I reach you?", prompt: "/contact" },
+      { label: "are you for hire?", prompt: "/hire" },
     ],
   };
 };

@@ -10,7 +10,6 @@ import type { Script } from "./terminal/Stream";
 import { sleep, streamText } from "./terminal/Stream";
 import { help } from "./scripts/intro";
 import { about } from "./scripts/about";
-import { projects } from "./scripts/projects";
 import { blog } from "./scripts/blog";
 import { contact, hire } from "./scripts/contact";
 import { surprise } from "./scripts/surprise";
@@ -53,13 +52,6 @@ export const COMMANDS: Command[] = [
     description: "who is Tom Davies?",
     category: "info",
     run: () => about,
-  },
-  {
-    name: "projects",
-    aliases: ["ls", "portfolio"],
-    description: "selected projects",
-    category: "info",
-    run: () => projects,
   },
   {
     name: "blog",
@@ -158,9 +150,9 @@ export const COMMANDS: Command[] = [
         await sleep(400);
         if (/hire[-\s]?me/i.test(target)) {
           yield* streamText(
-            `Permission granted. The real answer is \`/hire\` — but the short ` +
-              `version: happily at Lleverage, open to interesting side projects. ` +
-              `Mail [tvdavies@gmail.com](mailto:tvdavies@gmail.com).\n`,
+            `Permission granted. The real answer is \`/hire\`, but the short ` +
+              `version: I'm happy at Lleverage and open to interesting side ` +
+              `projects. Mail [tvdavies@gmail.com](mailto:tvdavies@gmail.com).\n`,
           );
           return;
         }
@@ -247,9 +239,9 @@ export const COMMANDS: Command[] = [
         if (!m) {
           yield* streamText(
             `## Models\n\n` +
-              `- **tom-4-opus** _(current)_ — verbose, the long answer\n` +
-              `- **tom-4-haiku** — terse, the short answer\n` +
-              `- **tom-1-classic** — circa 2014, plays guitar\n\n` +
+              `- **tom-4-opus** _(current)_: verbose, the long answer\n` +
+              `- **tom-4-haiku**: terse, the short answer\n` +
+              `- **tom-1-classic**: circa 2014, plays guitar\n\n` +
               `Usage: \`/model tom-4-haiku\`\n`,
           );
           return;
@@ -307,15 +299,13 @@ export const VIM_FILES: Record<string, { filename: string; content: string }> =
       filename: "~/about/bio.md",
       content: `# Tom Davies
 
-AI engineer. I build things with language models — agents, tools,
-eval harnesses, the kind of plumbing that turns "cool demo" into
-"ships and stays up."
+Software engineer in Sheffield. Over a decade in, a long stretch of it
+on critical infrastructure, now building AI agents at Lleverage.
 
-I care about legible systems, tight feedback loops, and the
-difference between something that demos well and something that
-works well.
+I care about legible systems and tight feedback loops. I like leaving
+a file simpler than I found it.
 
-— end of file —
+(end of file)
 `,
     },
     readme: {
@@ -331,7 +321,7 @@ Static Astro + vanilla TypeScript. WebGL shader behind the chrome.
   /theme    cycle palettes
   /vim      open a file (about | readme)
 
-— end of file —
+(end of file)
 `,
     },
   };

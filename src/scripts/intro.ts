@@ -24,19 +24,18 @@ export const intro: Script = async function* () {
 
   yield* streamText(
     `# Hi, I'm Tom Davies\n\n` +
-      `I'm an **AI engineer** — I build things with language models, and ` +
-      `occasionally [write about them](/blog). This site is, somewhat on the ` +
-      `nose, a portfolio shaped like the tools I use every day.\n\n` +
-      `Type a question below, use the nav up top, pick a chip, or try \`/help\` ` +
-      `for slash commands. ` +
-      `_(I'm not actually an LLM — every response is hand-written. The joke is ` +
-      `that the assistant is me.)_\n\n`,
+      `I'm a software engineer. I build things, lately a lot of them with ` +
+      `language models, and I [write about it](/blog) now and then. This site ` +
+      `is a portfolio shaped like the tools I use all day, which felt more ` +
+      `honest than a landing page.\n\n` +
+      `Type a question below, use the nav up top, or try \`/help\` for ` +
+      `commands. _(I'm not actually an LLM. Every response here is ` +
+      `hand-written. The joke is that the assistant is me.)_\n\n`,
   );
 
   yield {
     type: "chips",
     items: [
-      { label: "/projects", prompt: "/projects" },
       { label: "/blog", prompt: "/blog" },
       { label: "/contact", prompt: "/contact" },
       { label: "/glitch", prompt: "/glitch" },
@@ -49,8 +48,9 @@ export const intro: Script = async function* () {
 export const unknown: (input: string) => Script = (input) =>
   async function* () {
     yield* streamText(
-      `I'm a deterministic Tom, not a generative one — I only know answers I've written ahead of time. ` +
-        `I don't have a scripted answer for **${truncate(input, 60)}**.\n\n` +
+      `I'm a deterministic Tom, not a generative one. I only know the answers ` +
+        `I've written ahead of time, and I don't have one for ` +
+        `**${truncate(input, 60)}**.\n\n` +
         `Try one of these instead:`,
       { tokensPerSecond: 140 },
     );
@@ -58,7 +58,6 @@ export const unknown: (input: string) => Script = (input) =>
       type: "chips",
       items: [
         { label: "tell me about Tom", prompt: "tell me about Tom" },
-        { label: "what have you built?", prompt: "what have you built?" },
         { label: "read the blog", prompt: "/blog" },
         { label: "how do I contact you?", prompt: "how do I contact you?" },
         { label: "/help", prompt: "/help" },
@@ -69,16 +68,14 @@ export const unknown: (input: string) => Script = (input) =>
 export const help: Script = async function* () {
   yield* streamText(
     `## Commands\n\n` +
-      `- \`/help\` — this list\n` +
-      `- \`/whoami\` — who is Tom?\n` +
-      `- \`/projects\` — what I've built\n` +
-      `- \`/blog\` — read the blog (try \`/blog <slug>\`)\n` +
-      `- \`/contact\` — how to reach me\n` +
-      `- \`/theme\` — repaint everything\n` +
-      `- \`/clear\` — clear the screen\n\n` +
+      `- \`/help\` this list\n` +
+      `- \`/whoami\` who is Tom?\n` +
+      `- \`/blog\` read the blog (try \`/blog <slug>\`)\n` +
+      `- \`/contact\` how to reach me\n` +
+      `- \`/theme\` repaint everything\n` +
+      `- \`/clear\` clear the screen\n\n` +
       `## Try asking\n\n` +
       `- "tell me about Tom"\n` +
-      `- "what have you built?"\n` +
       `- "show me the blog"\n` +
       `- "how do I contact you?"\n` +
       `- "are you available for hire?"\n` +

@@ -1,6 +1,6 @@
 ---
 title: I haven't spoken to a human all day
-description: "A day on the receiving end of AI agents at work — and why good help should take load off you, not quietly move it onto your side."
+description: "A day on the receiving end of AI agents at work, and why good help should take load off you, not quietly move it onto your side."
 date: 2026-06-23
 tags: ["ai", "agents", "work"]
 ---
